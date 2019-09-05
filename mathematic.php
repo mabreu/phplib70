@@ -11,16 +11,22 @@ class Math {
 		$qtde = 0;
 
 		foreach( $vals as $v ) {
-			$total += $v;
-			$qtde++;
+			if( is_numeric( $v ) ) {
+			  $total += $v;
+			  $qtde++;
+			}
 		}
 
-		return $total / $qtde;
+		return ($qtde == 0 ? 0 : $total / $qtde);
 	}
 
 	public static function factorial( int $num ): int {
 		if( $num < 0 ) {
 			return 0;
+		}
+
+		if( $num == 0 ) {
+			return 1;
 		}
 
 		$res = $num;
@@ -151,16 +157,6 @@ class Math {
 		}
 
 		return sqrt(1 / ($qtde - 1) * $total);
-	}
-
-	public static function sum( array $vals ): float {
-		$total = 0;
-
-		foreach( $vals as $v ) {
-			$total += $v;
-		}
-
-		return $total;
 	}
 }
 /*
