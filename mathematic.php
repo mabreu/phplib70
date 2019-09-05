@@ -1,43 +1,21 @@
 <?php
 /*
  * Autor: Marco Antonio Abreu
- * Data: 07/10/2016 - Ultima atualizacao: 27/04/2019
- * Descricao: FunÃ§Ãµes matemÃ¡ticas
+ * Data: 07/10/2016 - Ultima atualizacao: 05/09/2019
+ * Descricao: Funções matemáticas
  */
+
 class Math {
-	public static function sum( array $vals ): float {
-		$total = 0;
-
-		foreach( $vals as $v ) {
-			$total += $v;
-		}
-
-		return $total;
-	}
-
 	public static function avg( array $vals ): float {
 		$total = 0;
-		$n = 0;
+		$qtde = 0;
 
 		foreach( $vals as $v ) {
 			$total += $v;
-			$n++;
+			$qtde++;
 		}
 
-		return $total / $n;
-	}
-
-	public static function stdDev( array $vals ): float {
-		$media = Math::avg( $vals );
-		$total = 0;
-		$n = 0;
-
-		foreach( $vals as $v ) {
-			$total += (($v - $media) ^ 2);
-			$n++;
-		}
-
-		return sqrt((1 / ($n - 1)) * $total);
+		return $total / $qtde;
 	}
 
 	public static function factorial( int $num ): int {
@@ -76,14 +54,67 @@ class Math {
 		return $res;
 	}
 
-	public static function mdc( int ...$n ): int {
-		$x = $n[0];
+	public static function fibonacciNumber( int $num ): int {
+		$a = 0;
+		$b = 1;
+
+		for( $i = 0; $i < $num; $i++ ) {
+			$c = $a;
+			$a = $b;
+			$b += $c;
+		}
+
+		return $a;
+	}
+
+	public static function fibonacciSequence( int $final, int $init = 0 ): array {
+		$res = array();
+		$a = 0;
+		$b = 1;
+
+		for( $i = 0; $i <= $final; $i++ ) {
+			if( $a >= $init ) {
+				array_push( $res, $a );
+			}
+
+			$c = $a;
+			$a = $b;
+			$b += $c;
+		}
+
+		return $res;
+	}
+
+	public static function isPrime( int $num ): bool {
+		$num = abs( $num );
+
+		if( $num == 2 ) {
+			return true;
+		}
+
+		if( $num < 2 || $num % 2 == 0 ) {
+			return false;
+		}
+
+		$limit = intdiv( $num, 3 );
+
+		for( $div = 3; $div <= $limit; $div += 2 ) {
+			if( $num % $div == 0 ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static function mdc( int ...$num ): int {
+		$x = $num[0];
 
 		if( func_num_args() > 2 ) {
-			unset( $n[0] );
-			$y = self::mdc( ...$n );
+			unset( $num[0] );
+			$y = self::mdc( ...$num );
 		} else {
-			$y = $n[1];
+			$y = $num[1];
 		}
 
 		$a = max( $x, $y );
@@ -91,42 +122,57 @@ class Math {
 
 		if( $a % $b == 0 ) {
 			return $b;
-		} else {
-			return self::mdc( $b, ( $a % $b ) );
 		}
+
+		return self::mdc( $b, ( $a % $b ) );
 	}
 
-	public static function mmc( int ...$n ): int {
-		$x = $n[0];
+	public static function mmc( int ...$num ): int {
+		$x = $num[0];
 
 		if( func_num_args() > 2 ) {
-			unset( $n[0] );
-			$y = self::mmc( ...$n );
+			unset( $num[0] );
+			$y = self::mmc( ...$num );
 		} else {
-			$y = $n[1];
+			$y = $num[1];
 		}
 
 		return ( $x * $y ) / self::mdc( $x, $y );
 	}
 
-	public static function isPrime( int $number ): bool {
-		if( $number < 2 || ( $number % 2 == 0 && $number != 2 ) ) {
-			return false;
+	public static function stdDev( array $vals ): float {
+		$media = self::avg( $vals );
+		$total = 0;
+		$qtde = 0;
+
+		foreach( $vals as $v ) {
+			$total += (($v - $media) ^ 2);
+			$qtde++;
 		}
 
-		if( $number == 2 ) {
-			return true;
+		return sqrt(1 / ($qtde - 1) * $total);
+	}
+
+	public static function sum( array $vals ): float {
+		$total = 0;
+
+		foreach( $vals as $v ) {
+			$total += $v;
 		}
 
-		$limit = intdiv( $number, 3 );
-
-		for( $div = 3; $div <= $limit; $div += 2 ) {
-			if( $number % $div == 0 ) {
-				return false;
-			}
-		}
-
-		return true;
+		return $total;
 	}
 }
+/*
+echo (Math::isPrime( 1 ) ? 'Primo' : "Não Primo") . "\n";
+echo (Math::isPrime( 2 ) ? 'Primo' : "Não Primo") . "\n";
+echo (Math::isPrime( 3 ) ? 'Primo' : "Não Primo") . "\n";
+echo (Math::isPrime( 6 ) ? 'Primo' : "Não Primo") . "\n";
+echo (Math::isPrime( 7 ) ? 'Primo' : "Não Primo") . "\n";
+echo (Math::isPrime( -5 ) ? 'Primo' : "Não Primo") . "\n";
+echo (Math::isPrime( -9 ) ? 'Primo' : "Não Primo") . "\n";
+echo Math::stdDev( [1, 12, 43, 85, 348] );
+echo Math::fibonacciNumber( 10 ) . "\n";
+echo print_r( Math::fibonacciSequence( 10 ) ) . "\n";
+*/
 ?>
